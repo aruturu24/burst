@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 dayjs.locale("pt-br");
 import { v4 as uuidv4 } from "uuid";
+import { HabitInfo } from "../components/HabitInfo";
 
 const availableWeekDays = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
 
@@ -68,7 +69,7 @@ export function New() {
 					Qual a recorrência?
 				</Text>
 				{availableWeekDays.map((weekDay, i) => (
-					<Checkbox 
+					<HabitInfo
 						key={weekDay} 
 						title={weekDay} 
 						checked={weekDays.includes(i)} 

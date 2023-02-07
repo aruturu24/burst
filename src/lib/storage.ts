@@ -13,6 +13,7 @@ type Habits = {
 	id: string;
 	title: string;
 	created_at: Date;
+	removed_at?: Date;
 	week_days: WeekDays[]
 }
 
@@ -37,7 +38,8 @@ export async function getSummary(): Promise<Summary[]> {
 		for (let completedHabit of storageCH) {
 			let habitOnDay = []
 			for (let habit of storageH) {
-				if (dayjs(habit.created_at).isBefore(dayjs(completedHabit.date).add(3, "h"))) {
+				if (dayjs(habit.created_at).isBefore(dayjs(completedHabit.date).add(3, "h"))
+					&& dayjs(completedHabit.date).isBefore(dayjs(habit.removed_at).add(3, "h"))) {
 					habitOnDay.push(habit.id);
 				}
 			}
@@ -98,7 +100,8 @@ export async function getDay(date: Date) {
 			}
 		};
 		storageH.map((habit) => {
-			if (dayjs(habit.created_at).isBefore(dayjs(date).add(1, "hour"))) {
+			if (dayjs(habit.created_at).isBefore(dayjs(date).add(1, "hour"))
+				&& dayjs(date).isBefore(dayjs(habit.removed_at))) {
 				habits.push(habit);
 			}
 		});
@@ -106,4 +109,29 @@ export async function getDay(date: Date) {
 		console.log(e);
 	}
 	return { habits, completedHabits }
+}
+
+export async function remHabit(id: string) {
+	try {
+		const storageH: Habits[] = JSON.parse(await AsyncStorage.getItem('@habits') || "[]");
+		const storageCH: CompletedHabits[] = JSON.parse(await AsyncStorage.getItem('@completed_habits') || "[]");
+		storageH.map((habit, i) => {
+			if (habit.id == id) {
+				if (dayjs(habit.created_at).isSame(dayjs(new Date).startOf("day"))) {
+					storageCH.map((completedHabit, index) => {
+						if (completedHabit.completed_habits.includes(id)) {
+							storageCH.splice(index, 1);
+						}
+					});
+					storageH.splice(i, 1);
+				} else {
+					storageH[i].removed_at = dayjs(new Date).startOf("day").toDate();
+				}
+			}
+		});
+		await AsyncStorage.setItem("@habits", JSON.stringify(storageH));
+		await AsyncStorage.setItem("@completed_habits", JSON.stringify(storageCH));
+	} catch (e) {
+		console.log(e);
+	}
 }

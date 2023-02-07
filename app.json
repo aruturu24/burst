@@ -2,7 +2,7 @@
   "expo": {
     "name": "Burst",
     "slug": "burst",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -24,10 +24,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#09090A"
-      }
+      },
+      "package": "com.aruturu24.burst"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "481e6209-6750-408d-a7da-92c4bccd61e9"
+      }
     }
   }
 }

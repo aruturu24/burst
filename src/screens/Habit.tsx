@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ScrollView, View, Text, Alert } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { BackButton } from "../components/BackButton";
 import dayjs from "dayjs";
 import { ProgressBar } from "../components/ProgressBar";
@@ -10,7 +10,8 @@ import { Loading } from "../components/Loading";
 import { generateProgressPercentage } from "../utils/generate-progess-percentage";
 import { HabitEmpty } from "../components/HabitEmpty";
 import clsx from "clsx";
-import { getDay, setCompletedHabit } from "../lib/storage";
+import { getDay, remHabit, setCompletedHabit } from "../lib/storage";
+import { HabitInfo } from "../components/HabitInfo";
 
 enum WeekDays {
 	Domingo, Segunda, Terça, Quarta, Quinta, Sexta
@@ -30,10 +31,11 @@ interface DayInfoProps {
 
 export function Habit() {
 	const [loading, setLoading] = useState(true);
-	const [dayInfo, setDayInfo] = useState<DayInfoProps | null>(null);
+	const [dayInfo, setDayInfo] = useState<DayInfoProps>({completedHabits: [], habits: []});
 	const [completedHabits, setCompletedHabits] = useState<string[]>([]);
 
 	const route = useRoute();
+	const { navigate } = useNavigation();
 	const { date } = route.params as Params;
 	const parsedDate = dayjs(date);
 	const isDateInPast = parsedDate.endOf("day").isBefore(new Date());
@@ -74,6 +76,15 @@ export function Habit() {
 		}
 	}
 
+	async function handleRemoveHabit(habitId: string) {
+		await remHabit(habitId);
+		const dayInfoHabits = dayInfo.habits.filter(habit => habit.id != habitId);
+		let newDayInfo = dayInfo
+		newDayInfo.habits = dayInfoHabits
+		setDayInfo(newDayInfo);
+		navigate("Habit", { date: parsedDate.toISOString() });
+	}
+
 	useEffect(() => {
 		fetchHabits();
 	}, []);
@@ -96,13 +107,16 @@ export function Habit() {
 				<View className={clsx("mt-6", {
 					["opacity-50"]: isDateInPast
 				})}>
-					{dayInfo?.habits ? dayInfo.habits.map(habit => (
-						<Checkbox 
+					{dayInfo.habits.length != 0 ? dayInfo.habits.map(habit => (
+						<HabitInfo
 							key={habit.id}
 							title={habit.title} 
+							habitId={habit.id}
 							checked={completedHabits.includes(habit.id)}
 							disabled={isDateInPast}
 							onPress={() => handleToggleHabit(habit.id)}
+							removeOnPress={() => handleRemoveHabit(habit.id)}
+							canRemove={true}
 						/>
 					)) : <HabitEmpty />}
 				</View>
