@@ -6,6 +6,13 @@ import { Loading } from './src/components/Loading';
 import { Routes } from './src/routes';
 import "./src/lib/dayjs";
 import * as Notifications from "expo-notifications";
+import mobileAds, { MaxAdContentRating } from 'react-native-google-mobile-ads';
+
+mobileAds()
+.initialize()
+.then(adapterStatuses => {
+  // Initialization complete!
+});
 
 async function registerForPushNotificationsAsync() {
   const { status } = await Notifications.requestPermissionsAsync();

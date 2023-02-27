@@ -8,13 +8,18 @@ import { generateRangeDatesFromYearStart } from "../utils/generate-range-between
 //import { api } from "../lib/axios";
 import dayjs from "dayjs";
 import { getSummary } from "../lib/storage";
-import mobileAds, { InterstitialAd, TestIds } from 'react-native-google-mobile-ads';
+import { AppOpenAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
 
-mobileAds()
-  .initialize()
-  .then(adapterStatuses => {
-    // Initialization complete!
-  });
+const adUnitId = __DEV__ ? TestIds.APP_OPEN : 'ca-app-pub-3833728725984948/4147068885';
+
+const appOpenAd = AppOpenAd.createForAdRequest(adUnitId, {
+  requestNonPersonalizedAdsOnly: true,
+});
+
+appOpenAd.addAdEventListener(AdEventType.LOADED, () => {
+	appOpenAd.show();
+});
+appOpenAd.load();
 
 const weekDays = ["D", "S", "T", "Q", "Q", "S", "S"];
 const datesFromYearStart = generateRangeDatesFromYearStart();
@@ -54,7 +59,6 @@ export function Home() {
 	}, []));
 
 	if(loading) {
-		InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL);
 		return <Loading/>
 	}
 
