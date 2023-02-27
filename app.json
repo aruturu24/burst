@@ -2,7 +2,7 @@
   "expo": {
     "name": "Burst",
     "slug": "burst",
-    "version": "1.1.0",
+    "version": "1.3.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -18,14 +18,19 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "permissions": {
+        "user-facing-alerts": true,
+        "notification": true
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#09090A"
       },
-      "package": "com.aruturu24.burst"
+      "package": "com.aruturu24.burst",
+      "permissions": ["NOTIFICATIONS"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -34,6 +39,21 @@
       "eas": {
         "projectId": "481e6209-6750-408d-a7da-92c4bccd61e9"
       }
-    }
+    },
+    "plugins": [
+      "expo-notifications",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ]
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-3833728725984948~2346902055",
+    "ios_app_id": "ca-app-pub-3833728725984948~3923707606"
   }
 }

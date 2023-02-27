@@ -8,6 +8,13 @@ import { generateRangeDatesFromYearStart } from "../utils/generate-range-between
 //import { api } from "../lib/axios";
 import dayjs from "dayjs";
 import { getSummary } from "../lib/storage";
+import mobileAds, { InterstitialAd, TestIds } from 'react-native-google-mobile-ads';
+
+mobileAds()
+  .initialize()
+  .then(adapterStatuses => {
+    // Initialization complete!
+  });
 
 const weekDays = ["D", "S", "T", "Q", "Q", "S", "S"];
 const datesFromYearStart = generateRangeDatesFromYearStart();
@@ -47,6 +54,7 @@ export function Home() {
 	}, []));
 
 	if(loading) {
+		InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL);
 		return <Loading/>
 	}
 
