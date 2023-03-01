@@ -9,6 +9,7 @@ import { generateRangeDatesFromYearStart } from "../utils/generate-range-between
 import dayjs from "dayjs";
 import { getSummary } from "../lib/storage";
 import { AppOpenAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
+import { useTranslation } from "react-i18next";
 
 const adUnitId = __DEV__ ? TestIds.APP_OPEN : 'ca-app-pub-3833728725984948/4147068885';
 
@@ -21,7 +22,6 @@ appOpenAd.addAdEventListener(AdEventType.LOADED, () => {
 });
 appOpenAd.load();
 
-const weekDays = ["D", "S", "T", "Q", "Q", "S", "S"];
 const datesFromYearStart = generateRangeDatesFromYearStart();
 const minimumSummaryDatesSizes = 18*5;
 const amountOfDaysToFill = minimumSummaryDatesSizes - datesFromYearStart.length;
@@ -38,6 +38,9 @@ export function Home() {
 	const [loading, setLoading] = useState(true);
 	const [summary, setSummary] = useState<SummaryProps | null>(null);
 	const { navigate } = useNavigation();
+	const { t } = useTranslation();
+ 
+	const weekDays: String[] = JSON.parse(t("weekDays")) || ["S", "M", "T", "W", "T", "F", "S"];
 
 	async function fetchData() {
 		try {
@@ -47,7 +50,7 @@ export function Home() {
 			const res = await getSummary();
 			setSummary(res);
 		} catch (e) {
-			Alert.alert("Ops", "Não foi possível carregar o sumário de hábitos.");
+			Alert.alert("Ops!", t("error.habitSummary") || "");
 			console.log(e);
 		} finally {
 			setLoading(false);

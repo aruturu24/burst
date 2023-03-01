@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br"
+import { getLocales } from "expo-localization";
 
-dayjs.locale("pt-br");
+dayjs.locale(getLocales()[0].languageCode);

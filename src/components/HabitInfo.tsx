@@ -6,13 +6,12 @@ interface Props extends TouchableOpacityProps {
 	title: string;
 	checked?: boolean;
 	disabled?: boolean;
-	habitId: string;
 	canRemove?: boolean;
 	removeOnPress?: () => void
 }
 
 export function HabitInfo({ 
-		title, checked = false, disabled = false, habitId, canRemove = false, removeOnPress, ...rest
+		title, checked = false, disabled = false, canRemove = false, removeOnPress, ...rest
 	}: Props) {
 	return(
 		<View className="flex-row mb-2 justify-between">

@@ -2,9 +2,11 @@ import { View, TouchableOpacity, Text, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native"
 import { Feather } from "@expo/vector-icons";
 import colors from "tailwindcss/colors";
+import { useTranslation } from "react-i18next";
 
 export function Header() {
 	const { navigate } = useNavigation();
+	const { t } = useTranslation();
 
 	return(
 		<View className="w-full flex-row items-center justify-between">
@@ -20,7 +22,7 @@ export function Header() {
 					color={colors.amber[500]}
 					size={20}
 				/>
-				<Text className="text-white ml-3 font-semibold text-base">Novo</Text>
+				<Text className="text-white ml-3 font-semibold text-base">{t("new")}</Text>
 			</TouchableOpacity>
 		</View>
 	);

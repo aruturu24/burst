@@ -7,6 +7,7 @@ import { Routes } from './src/routes';
 import "./src/lib/dayjs";
 import * as Notifications from "expo-notifications";
 import mobileAds, { MaxAdContentRating } from 'react-native-google-mobile-ads';
+import "./src/lib/react-i18next";
 
 mobileAds()
 .initialize()
@@ -26,17 +27,24 @@ async function registerForPushNotificationsAsync() {
 }
 
 async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: 'Marque seu progresso.',
-      body: 'Entre no app e complete seus hábitos!',
-    },
-    trigger: {
-      hour: 18,
-      minute: 0,
-      repeats: true,
-    },
-  });
+  const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
+  const notificationAlreadyScheduled = scheduledNotifications.some(notification =>
+    notification.trigger.type === "daily"
+  );
+
+  if(!notificationAlreadyScheduled) {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: 'Marque seu progresso.',
+        body: 'Entre no app e complete seus hábitos!',
+      },
+      trigger: {
+        hour: 18,
+        minute: 0,
+        repeats: true,
+      },
+    });
+  }
 }
 
 export default function App() {

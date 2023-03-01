@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { TouchableOpacity, ScrollView, View, Text, TextInput, Alert } from "react-native";
 import { BackButton } from "../components/BackButton";
-import { Checkbox } from "../components/Checkbox";
 import { Feather } from "@expo/vector-icons";
 import colors from "tailwindcss/colors";
 //import { api } from "../lib/axios";
@@ -11,12 +10,15 @@ import "dayjs/locale/pt-br";
 dayjs.locale("pt-br");
 import { v4 as uuidv4 } from "uuid";
 import { HabitInfo } from "../components/HabitInfo";
-
-const availableWeekDays = ["Domingo", "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"];
+import { useTranslation } from "react-i18next";
 
 export function New() {
 	const[title, setTitle] = useState("");
 	const [weekDays, setWeekDays] = useState<number[]>([]);
+	const { t } = useTranslation();
+
+	const availableWeekDays: string[] = JSON.parse(t("availableWeekDays")) || [""];
+	
 	function handleToggleWeekDay(weekDayIndex: number) {
 		if(weekDays.includes(weekDayIndex)) {
 			setWeekDays(prevState => prevState.filter(weekDay => weekDay !== weekDayIndex));
@@ -29,7 +31,7 @@ export function New() {
 		setTitle(title.trim())
 		try {
 			if(!title || weekDays.length === 0) {
-				return Alert.alert("Novo hábito", "Informe o nome do hábito e escolha a recorrência.")
+				return Alert.alert(JSON.parse(t("newHabitNI"))[0], JSON.parse(t("newHabitNI"))[1])
 			}
 
 			//await api.post("/habits", {title, weekDays});
@@ -41,10 +43,10 @@ export function New() {
 			});
 			setTitle("");
 			setWeekDays([]);
-			Alert.alert("Novo hábito", "Hábito criado com sucesso!");
+			Alert.alert(JSON.parse(t("newHabitS"))[0], JSON.parse(t("newHabitS"))[1]);
 		} catch(e) {
 			console.log(e);
-			Alert.alert("Ops", "Não foi possível criar o novo hábito.");
+			Alert.alert("Ops!", t("newHabitF") || "");
 		}
 	}
 
@@ -53,20 +55,20 @@ export function New() {
 			<BackButton />
 			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
 				<Text className="mt-6 text-white font-extrabold text-3xl">
-					Criar hábito
+					{t("newHabit.title")}
 				</Text>
 				<Text className="mt-6 text-white font-semibold text-base">
-					Qual seu comprometimento?
+				{t("newHabit.inputTitle")}
 				</Text>
 				<TextInput 
 					className="h-12 pl-4 rounded-lg mt-3 bg-zinc-900 text-white border-2 border-zinc-800 focus:border-green-600"
-					placeholder="Exercícios, dromir bem, etc..."
+					placeholder={t("newHabit.inputPlaceholder")||""}
 					placeholderTextColor={colors.zinc[400]}
 					onChangeText={setTitle}
 					value={title}
 				/>
 				<Text className="font-semibold mt-4 mb-3 text-white text-base">
-					Qual a recorrência?
+					{t("newHabit.weekDaysTitle")}
 				</Text>
 				{availableWeekDays.map((weekDay, i) => (
 					<HabitInfo
@@ -84,7 +86,7 @@ export function New() {
 				>
 					<Feather name="check" size={20} color={colors.white} />
 					<Text className="font-semibold text-base text-white ml-2">
-						Confirmar
+						{t("confirm")}
 					</Text>
 				</TouchableOpacity>
 			</ScrollView>
