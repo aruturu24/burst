@@ -1,19 +1,15 @@
 import 'react-native-get-random-values';
 import { StatusBar } from 'react-native';
 import { useEffect } from 'react';
-import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold} from "@expo-google-fonts/inter"
+import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold, Inter_800ExtraBold } from "@expo-google-fonts/inter"
 import { Loading } from './src/components/Loading';
 import { Routes } from './src/routes';
 import "./src/lib/dayjs";
 import * as Notifications from "expo-notifications";
-import mobileAds, { MaxAdContentRating } from 'react-native-google-mobile-ads';
+import mobileAds from 'react-native-google-mobile-ads';
 import "./src/lib/react-i18next";
 
-mobileAds()
-.initialize()
-.then(adapterStatuses => {
-  // Initialization complete!
-});
+mobileAds().initialize()
 
 async function registerForPushNotificationsAsync() {
   const { status } = await Notifications.requestPermissionsAsync();
@@ -21,7 +17,7 @@ async function registerForPushNotificationsAsync() {
     alert('Permissão para mandar notificações recusada :(');
     return;
   }
-  const token = (await Notifications.getExpoPushTokenAsync()).data;
+  //const token = (await Notifications.getExpoPushTokenAsync()).data;
   //console.log(token);
   // Save the token to your server for future use
 }
@@ -32,7 +28,7 @@ async function schedulePushNotification() {
     notification.trigger.type === "daily"
   );
 
-  if(!notificationAlreadyScheduled) {
+  if (!notificationAlreadyScheduled) {
     await Notifications.scheduleNotificationAsync({
       content: {
         title: 'Marque seu progresso.',
@@ -60,7 +56,7 @@ export default function App() {
     Inter_800ExtraBold
   })
 
-  if(!fontsLoaded) return (<Loading />)
+  if (!fontsLoaded) return (<Loading />)
 
   return (
     <>

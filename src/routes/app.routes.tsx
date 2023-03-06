@@ -1,26 +1,30 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-const { Navigator, Screen } = createNativeStackNavigator();
+const { Navigator, Screen, Group } = createNativeStackNavigator();
 
 import { Home } from "../screens/Home";
 import { Habit } from "../screens/Habit";
 import { New } from "../screens/New";
 
 export function AppRoutes() {
-	return(
+	return (
 		<Navigator screenOptions={{ headerShown: false }}>
-			<Screen
-				name="Home"
-				component={Home}
-			/>
-			<Screen
-				name="Habit"
-				component={Habit}
-			/>
-			<Screen
-				name="New"
-				component={New}
-			/>
+			<Group>
+				<Screen
+					name="Home"
+					component={Home}
+				/>
+				<Screen
+					name="Habit"
+					component={Habit}
+				/>
+			</Group>
+			<Group screenOptions={{ presentation: "modal" }}>
+				<Screen
+					name="New"
+					component={New}
+				/>
+			</Group>
 
 		</Navigator>
 	)
