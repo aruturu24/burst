@@ -27,7 +27,7 @@ interface DayInfoProps {
 
 export function Habit() {
 	const [loading, setLoading] = useState(true);
-	const [dayInfo, setDayInfo] = useState<DayInfoProps>({completedHabits: [], habits: []});
+	const [dayInfo, setDayInfo] = useState<DayInfoProps>({ completedHabits: [], habits: [] });
 	const [completedHabits, setCompletedHabits] = useState<string[]>([]);
 	const { t } = useTranslation();
 
@@ -38,7 +38,7 @@ export function Habit() {
 	const isDateInPast = parsedDate.endOf("day").isBefore(new Date());
 	const dayOfWeek = parsedDate.format("dddd");
 	const dayAndMonth = parsedDate.format("DD/MM");
-	const habitProgress = dayInfo?.habits.length ? 
+	const habitProgress = dayInfo?.habits.length ?
 		generateProgressPercentage(completedHabits.length, dayInfo.habits.length) : 0;
 
 	async function fetchHabits() {
@@ -52,8 +52,8 @@ export function Habit() {
 			setCompletedHabits(res.completedHabits);
 		} catch (e) {
 			console.log(e);
-			Alert.alert("Ops!", t("error.habitLoad")||"");
-		}finally {
+			Alert.alert("Ops!", t("error.habitLoad") || "");
+		} finally {
 			setLoading(false);
 		}
 	}
@@ -62,14 +62,14 @@ export function Habit() {
 		try {
 			//await api.patch(`/habits/${habitId}/toggle`);
 			await setCompletedHabit(habitId);
-			if(completedHabits.includes(habitId)) {
+			if (completedHabits.includes(habitId)) {
 				setCompletedHabits(prev => prev.filter(habit => habit !== habitId));
 			} else {
 				setCompletedHabits(prev => [...prev, habitId]);
 			}
 		} catch (e) {
 			console.log(e);
-			Alert.alert("Ops!", t("error.habitToggle")||"");
+			Alert.alert("Ops!", t("error.habitToggle") || "");
 		}
 	}
 
@@ -86,11 +86,11 @@ export function Habit() {
 		fetchHabits();
 	}, []);
 
-	if(loading) {
+	if (loading) {
 		return <Loading />
 	}
 
-	return(
+	return (
 		<View className="flex-1 bg-background px-8 pt-16">
 			<BackButton />
 			<ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 100 }}>
@@ -107,7 +107,7 @@ export function Habit() {
 					{dayInfo.habits.length != 0 ? dayInfo.habits.map(habit => (
 						<HabitInfo
 							key={habit.id}
-							title={habit.title} 
+							title={habit.title}
 							checked={completedHabits.includes(habit.id)}
 							disabled={isDateInPast}
 							onPress={() => handleToggleHabit(habit.id)}
@@ -116,7 +116,7 @@ export function Habit() {
 						/>
 					)) : <HabitEmpty />}
 				</View>
-				{isDateInPast && 
+				{isDateInPast &&
 					<Text className="text-white mt-10 text-center">
 						{t("pastHabits")}
 					</Text>}

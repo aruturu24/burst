@@ -10,7 +10,7 @@ import { getSummary } from "../lib/storage";
 import { AppOpenAd, AdEventType } from 'react-native-google-mobile-ads';
 import { useTranslation } from "react-i18next";
 
-const adUnitId = 'ca-app-pub-3833728725984948/4147068885';
+const adUnitId = "ca-app-pub-3833728725984948/4147068885";
 
 const appOpenAd = AppOpenAd.createForAdRequest(adUnitId, {
 	requestNonPersonalizedAdsOnly: true,
